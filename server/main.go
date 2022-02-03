@@ -10,15 +10,35 @@
 package main
 
 import (
+	"flag"
 	"log"
 	"net/http"
 
 	openapi "github.com/GIT_USER_ID/GIT_REPO_ID/go"
+	"github.com/GIT_USER_ID/GIT_REPO_ID/go/testdb"
+	"github.com/kelseyhightower/envconfig"
 )
+
+type AppConfig struct {
+	PostgresDSN string `envconfig:"POSTGRES_DSN" default:"host=localhost dbname=project port=5432 sslmode=disable"`
+}
+
+var Config AppConfig
+
+func init() {
+	flag.Parse()
+	_ = envconfig.Process("", &Config)
+}
 
 func main() {
 	log.Printf("Server started")
 
+	db, err := testdb.New(Config.PostgresDSN)
+	if err != nil {
+		panic(err)
+	}
+
+	_ = db
 	ApiApiService := openapi.NewApiApiService()
 	ApiApiController := openapi.NewApiApiController(ApiApiService)
 
