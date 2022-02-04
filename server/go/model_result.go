@@ -16,11 +16,11 @@ import (
 type Result struct {
 
 	// ID
-	Id string `json:"id,omitempty"`
+	Id int64 `json:"id,omitempty"`
 
-	Successful Assertion `json:"successful,omitempty"`
+	Successful Assertion `gorm:"embedded" json:"successful,omitempty"`
 
-	Failed Assertion `json:"failed,omitempty"`
+	Failed Assertion `gorm:"embedded" json:"failed,omitempty"`
 
 	TimeStamp time.Time `json:"timeStamp,omitempty"`
 }

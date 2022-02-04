@@ -12,7 +12,7 @@ package openapi
 type Attribute struct {
 
 	// ID
-	Id string `json:"id,omitempty"`
+	Id int64 `gorm:"primaryKey" json:"id,omitempty"`
 
 	Key string `json:"key,omitempty"`
 

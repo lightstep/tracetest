@@ -12,16 +12,16 @@ package openapi
 type Test struct {
 
 	// ID
-	Id string `json:"id,omitempty"`
+	Id int64 `gorm:"primaryKey,autoIncrement" json:"id,omitempty"`
 
 	Name string `json:"name,omitempty"`
 
 	Description string `json:"description,omitempty"`
 
-	ServiceUnderTest TestServiceUnderTest `json:"serviceUnderTest,omitempty"`
+	ServiceUnderTest TestServiceUnderTest `gorm:"embedded" json:"serviceUnderTest,omitempty"`
 
 	// Definition of assertions that are going to be made
-	Assertions []Assertion `json:"assertions,omitempty"`
+	Assertions []Assertion `gorm:"many2many:tests_assertions;" json:"assertions,omitempty"`
 
 	Repeats int32 `json:"repeats,omitempty"`
 }

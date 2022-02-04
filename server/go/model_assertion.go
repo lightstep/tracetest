@@ -12,7 +12,7 @@ package openapi
 type Assertion struct {
 
 	// ID
-	Id string `json:"id,omitempty"`
+	Id int64 `gorm:"primaryKey" json:"id,omitempty"`
 
 	OperationName string `json:"operationName,omitempty"`
 
@@ -20,7 +20,7 @@ type Assertion struct {
 
 	NumOfSPans int32 `json:"numOfSPans,omitempty"`
 
-	Attributes []Attribute `json:"attributes,omitempty"`
+	Attributes []Attribute `gorm:"many2many:assertions_attributes;" json:"attributes,omitempty"`
 }
 
 // AssertAssertionRequired checks if the required fields are not zero-ed

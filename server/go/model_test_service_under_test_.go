@@ -12,7 +12,7 @@ package openapi
 type TestServiceUnderTest struct {
 
 	// ID
-	Id string `json:"id,omitempty"`
+	Id int64 `gorm:"primaryKey" json:"id,omitempty"`
 
 	// URL of the service under test
 	Url string `json:"url,omitempty"`
