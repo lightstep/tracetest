@@ -3,7 +3,6 @@ package executor
 import (
 	"context"
 	"io"
-	"math/rand"
 	"net/http"
 
 	openapi "github.com/GIT_USER_ID/GIT_REPO_ID/go"
@@ -20,7 +19,6 @@ import (
 
 type TestExecutor struct {
 	traceProvider *sdktrace.TracerProvider
-	rand          *rand.Rand
 }
 
 func New() (*TestExecutor, error) {
@@ -30,19 +28,15 @@ func New() (*TestExecutor, error) {
 	}
 	return &TestExecutor{
 		traceProvider: tp,
-		rand:          rand.New(rand.NewSource(0)),
 	}, nil
 }
 
-func (te *TestExecutor) Execute(test *openapi.Test, tid trace.TraceID) (*openapi.Result, error) {
+func (te *TestExecutor) Execute(test *openapi.Test, tid trace.TraceID, sid trace.SpanID) (*openapi.Result, error) {
 	client := http.Client{
 		Transport: otelhttp.NewTransport(http.DefaultTransport,
 			otelhttp.WithTracerProvider(te.traceProvider),
 		),
 	}
-
-	sid := trace.SpanID{}
-	te.rand.Read(sid[:])
 
 	var tf trace.TraceFlags
 	sc := trace.NewSpanContext(trace.SpanContextConfig{
@@ -57,7 +51,7 @@ func (te *TestExecutor) Execute(test *openapi.Test, tid trace.TraceID) (*openapi
 	if err != nil {
 		return nil, err
 	}
-	_, err = client.Do(req.WithContext(trace.ContextWithSpanContext(context.Background(), sc)))
+	_, err = client.Do(req.WithContext(trace.ContextWithRemoteSpanContext(context.Background(), sc)))
 	if err != nil {
 		return nil, err
 	}
