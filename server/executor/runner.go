@@ -29,22 +29,24 @@ type TestsDB interface {
 	ResultUpdater
 }
 
-func NewPersistentRunner(e Executor, resultDB TestsDB, tp TracePoller) PersistentRunner {
+func NewPersistentRunner(e Executor, resultDB TestsDB, tp TracePoller, ar AssertionRunner) PersistentRunner {
 	return persistentRunner{
-		executor:     e,
-		tp:           tp,
-		testsDB:      resultDB,
-		idGen:        id.NewRandGenerator(),
-		executeQueue: make(chan execReq, 5),
-		exit:         make(chan bool, 1),
+		executor:        e,
+		tp:              tp,
+		testsDB:         resultDB,
+		assertionRunner: ar,
+		idGen:           id.NewRandGenerator(),
+		executeQueue:    make(chan execReq, 5),
+		exit:            make(chan bool, 1),
 	}
 }
 
 type persistentRunner struct {
-	executor Executor
-	tp       TracePoller
-	idGen    id.Generator
-	testsDB  TestsDB
+	executor        Executor
+	tp              TracePoller
+	assertionRunner AssertionRunner
+	idGen           id.Generator
+	testsDB         TestsDB
 
 	executeQueue chan execReq
 	exit         chan bool

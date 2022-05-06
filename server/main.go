@@ -75,7 +75,11 @@ func main() {
 	tracePoller.Start(5) // worker count. should be configurable
 	defer tracePoller.Stop()
 
-	runner := executor.NewPersistentRunner(ex, testDB, tracePoller)
+	assertionRunner := executor.NewAssertionRunner(testDB)
+	assertionRunner.Start(5)
+	defer assertionRunner.Stop()
+
+	runner := executor.NewPersistentRunner(ex, testDB, tracePoller, assertionRunner)
 	runner.Start(5) // worker count. should be configurable
 	defer runner.Stop()
 
