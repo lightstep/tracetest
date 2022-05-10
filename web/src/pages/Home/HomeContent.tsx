@@ -15,7 +15,7 @@ const {onCreateTestClick} = HomeAnalyticsService;
 const HomeContent: React.FC = () => {
   const [openCreateTestModal, setOpenCreateTestModal] = useState(false);
 
-  const {setCurrentStep, setIsOpen, currentStep, isOpen: isGuidOpen} = useGuidedTour(GuidedTours.Home);
+  const {setCurrentStep, currentStep, isOpen: isGuidOpen} = useGuidedTour(GuidedTours.Home);
 
   useEffect(() => {
     if (currentStep > 0 && !openCreateTestModal && isGuidOpen) {
